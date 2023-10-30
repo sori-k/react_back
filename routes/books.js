@@ -32,7 +32,7 @@ router.post('/insert', function(req, res){
     db.get().query(sql, [isbn], function(err, rows){
         //if(err) console.log('err1.............', err);
         if(rows.length > 0){
-            res.send("1");
+            res.send("1"); //이미 있어서 등록 안된거
         }else{
             sql = 'insert into books(title, price, authors, contents, publisher, image, isbn) values(?, ?, ?, ?, ?, ?, ?)';
             db.get().query(sql, [title, price, authors, contents, publisher, image, isbn], function(err){
@@ -50,9 +50,9 @@ router.post('/delete', function(req, res){
 
     db.get().query(sql, [bid], function(err){
         if(err){
-            res.send('0');
+            res.send('0'); //못지운거
         }else{
-            res.send('1');
+            res.send('1'); //지운거
         }
     });
 });
