@@ -92,9 +92,10 @@ router.post('/delete', function(req, res){
 //도서정보
 router.get('/read/:bid', function(req, res){ //localhost:5000/books/read/78
     const bid=req.params.bid;
-    const sql= 'call book_read(?)';
+    const uid=req.query.uid ? req.query.uid : '';
+    const sql= 'call book_read(?, ?)';
 
-    db.get().query(sql, [bid], function(err, rows){
+    db.get().query(sql, [bid, uid], function(err, rows){
         res.send(rows[0][0]);
     });
 });
@@ -119,4 +120,35 @@ router.post('/update', function(req, res){
         }
     });
 });
+
+//좋아요 추가
+router.post('/insert/favorite', function(req, res){
+    const uid=req.body.uid;
+    const bid=req.body.bid;
+
+    const sql='insert into favorite(uid, bid) values(?, ?)';
+    db.get().query(sql, [uid, bid], function(err){
+        if(err){
+            res.send('0');
+        }else{
+            res.send('1');
+        }
+    });
+});
+
+//좋아요 취소
+router.post('/delete/favorite', function(req, res){
+    const uid=req.body.uid;
+    const bid=req.body.bid;
+
+    const sql='delete from favorite where uid=? and bid=?';
+    db.get().query(sql, [uid, bid], function(err){
+        if(err){
+            res.send('0');
+        }else{
+            res.send('1');
+        }
+    });
+});
+
 module.exports = router;
